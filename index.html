@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Selamat Menonton Sayang🥰</title>
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#000;
+}
+.container{
+  position:relative;
+  width:100%;
+  max-width:720px;
+}
+video{
+  width:100%;
+  border-radius:10px;
+}
+
+/* overlay play awal */
+#playOverlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.6);
+  color:#fff;
+  font-size:22px;
+  font-weight:bold;
+  cursor:pointer;
+  border-radius:10px;
+}
+
+/* overlay tombol iklan */
+#adOverlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.75);
+  border-radius:10px;
+}
+#adBtn{
+  background:#ff5722;
+  color:#fff;
+  padding:14px 22px;
+  font-size:18px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+}
+#adBtn:active{
+  transform:scale(.97);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <video id="vid" playsinline preload="metadata">
+    <source src="https://cdn.videy.co/pnFlSdvt1.mp4" type="video/mp4">
+  </video>
+
+  <div id="playOverlay">▶ TAP UNTUK PLAY</div>
+
+  <div id="adOverlay">
+    <button id="adBtn">LANJUTKAN ▶</button>
+  </div>
+</div>
+
+<script>
+const video = document.getElementById("vid");
+const playOverlay = document.getElementById("playOverlay");
+const adOverlay = document.getElementById("adOverlay");
+const adBtn = document.getElementById("adBtn");
+
+const adUrl = "https://s.shopee.co.id/5L4wuJqb2U";
+const REDIRECT_KEY = "alreadyRedirected";
+
+let readyToRedirect = false;
+
+// klik play pertama
+playOverlay.addEventListener("click", () => {
+  playOverlay.style.display = "none";
+  video.controls = true;
+  video.play();
+});
+
+// setelah 5 detik → tampilkan tombol (jika belum pernah redirect)
+video.addEventListener("timeupdate", () => {
+  if (
+    video.currentTime >= 5 &&
+    !localStorage.getItem(REDIRECT_KEY) &&
+    !readyToRedirect
+  ) {
+    readyToRedirect = true;
+    video.pause();
+    adOverlay.style.display = "flex";
+  }
+});
+
+// klik tombol lanjutkan
+adBtn.addEventListener("click", () => {
+  localStorage.setItem(REDIRECT_KEY, "yes");
+  window.open(adUrl, "_blank");
+  adOverlay.style.display = "none";
+  video.play();
+});
+</script>
+
+</body>
+</html>
